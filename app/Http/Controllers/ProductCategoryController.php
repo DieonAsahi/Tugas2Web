@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\Categories;
 
@@ -44,7 +43,13 @@ class ProductCategoryController extends Controller
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'description' => 'required'
+            'description' => 'required',
+            'sku' => 'required|string|max:50',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'product_category_id' => 'required|exists:product_categories,id',
+            'image_url' => 'nullable|url|max:255',
+            'is_active' => 'boolean',
         ]);
 
         /**
@@ -64,13 +69,12 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
-            $category->image = $imagePath;
-        }
+        $category->sku = $request->sku;
+        $category->price = $request->price;
+        $category->stock = $request->stock;
+        $category->product_category_id = $request->product_category_id;
+        $category->image_url = $request->image_url;
+        $category->is_active = $request->is_active;
 
         $category->save();
 
@@ -113,7 +117,13 @@ class ProductCategoryController extends Controller
         $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'description' => 'required'
+            'description' => 'required',
+            'sku' => 'required|string|max:50',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'product_category_id' => 'required|exists:product_categories,id',
+            'image_url' => 'nullable|url|max:255',
+            'is_active' => 'boolean',
         ]);
 
         /**
@@ -133,13 +143,12 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
-            $category->image = $imagePath;
-        }
+        $category->sku = $request->sku;
+        $category->price = $request->price;
+        $category->stock = $request->stock;
+        $category->product_category_id = $request->product_category_id;
+        $category->image_url = $request->image_url;
+        $category->is_active = $request->is_active ?? true;
 
         $category->save();
 

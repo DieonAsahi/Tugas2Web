@@ -7,11 +7,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCategoryController;
 
 
-Route::get('/', [DashboardController::class, 'index'])->name('home');
+//Route::get('/', [DashboardController::class, 'index'])->name('home');
+Route::get('/', [ProductCategoryController::class, 'index'])->name('home');
 Route::get('products', [HomepageController::class, 'products']);
+Route::get('categories', [ProductCategoryController::class, 'categories']);
+
 //Route::get('products', [ProductCategoryController::class, 'index']);
 Route::get('product/{slug}', [HomepageController::class, 'product']);
-Route::get('categories',[HomepageController::class, 'categories']);
+//Route::get('categories',[HomepageController::class, 'categories']);
 Route::get('category/{slug}', [HomepageController::class, 'category']);
 Route::get('cart', [HomepageController::class, 'cart']);
 Route::get('checkout', [HomepageController::class, 'checkout']);

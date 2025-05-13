@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product_categories', function (Blueprint $table) {
             $table->id(); // id: unsignedBigInteger, primary key, auto-increment
             $table->string('name', 255); // name: string, max 255, required
             $table->string('slug', 255)->unique(); // slug: string, unique, max 255
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_categories');
     }
 };
