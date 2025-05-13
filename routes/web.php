@@ -3,11 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductCategoryController;
 
 
 Route::get('/', [DashboardController::class, 'index'])->name('home');
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-Route::get('/settings/profile', [ProfileController::class, 'edit'])->name('settings.profile');
 Route::get('products', [HomepageController::class, 'products']);
 //Route::get('products', [ProductCategoryController::class, 'index']);
 Route::get('product/{slug}', [HomepageController::class, 'product']);
@@ -16,42 +16,35 @@ Route::get('category/{slug}', [HomepageController::class, 'category']);
 Route::get('cart', [HomepageController::class, 'cart']);
 Route::get('checkout', [HomepageController::class, 'checkout']);
 
+// Route::get('/produk', function() {
+//     return "Menampilkan daftar produk";
+// });
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Route::get('/keranjang', function() {
+//     return "Produk ditambahkan ke keranjang";
+// });
 
-Route::resource('dashboard/categories', ProductCategoryController::class);
+// Route::get('/checkout', function() {
+//     return "Checkout berhasil";
+// });
 
-Route::get('/produk', function() {
-    return "Menampilkan daftar produk";
-});
+// Route::get('/order', function() {
+//     return "Menampilkan riwayat pesanan";
+// });
 
-Route::get('/keranjang', function() {
-    return "Produk ditambahkan ke keranjang";
-});
+// Route::get('/profil', function() {
+//     return "Menampilkan profil pengguna";
+// });
 
-Route::get('/checkout', function() {
-    return "Checkout berhasil";
-});
+// Route::get('/helloworld', function() {
+//     return "ini adalah halaman web";
+// });
 
-Route::get('/order', function() {
-    return "Menampilkan riwayat pesanan";
-});
+// Route::get('/', function () {
+//     $title = "Homepage";
 
-Route::get('/profil', function() {
-    return "Menampilkan profil pengguna";
-});
-
-Route::get('/helloworld', function() {
-    return "ini adalah halaman web";
-});
-
-Route::get('/', function () {
-    $title = "Homepage";
-
-    return view('web.homepage', ['title' =>$title]);
-});#->name('home');
+//     return view('web.homepage', ['title' =>$title]);
+// });#->name('home');
 
 // Route::get('products', function () {
 //     $title = "Products";
@@ -92,6 +85,14 @@ Route::get('/', function () {
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+
+ 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+ 
+   Route::resource('categories',ProductCategoryController::class); 
+ 
+})->middleware(['auth', 'verified']); 
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
