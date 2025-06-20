@@ -1,22 +1,30 @@
 <?php
 
-// database/migrations/xxxx_xx_xx_create_customers_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomersTable extends Migration {
-    public function up() {
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
         Schema::create('customers', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id(); // BIGINT, UNSIGNED, AUTO_INCREMENT, PRIMARY KEY
             $table->string('name', 255);
             $table->string('email', 255)->unique();
             $table->text('address')->nullable();
-            $table->timestamps(); // created_at & updated_at nullable by default
+            $table->timestamps(); // created_at & updated_at
         });
     }
 
-    public function down() {
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
         Schema::dropIfExists('customers');
     }
-}
+};

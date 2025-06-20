@@ -4,79 +4,125 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomePageController extends Controller
+use App\Models\Categories;
+use App\Models\Product;
+use App\Models\Theme;
+
+use \Binafy\LaravelCart\Models\Cart;
+
+class HomepageController extends Controller
 {
-    //fungsi untuk menampilkan halaman homepage 
-    public function index() 
-    { 
-        $categories = [ 
-            [ 
-                'id'=> 1, 
-                'name' => 'pria', 
-                'slug' => 'Pakaian Pria', 
-                'description' => 'Ini adalah produk pakaian pria', 
-                'image' => 'https://example.com/image1.jpg', 
-            ], 
-            [ 
-                'id'=> 2, 
-                'name' => 'wanita', 
-                'slug' => 'Pakaian Wanita', 
-                'description' => 'Ini adalah produk pakaian wanita', 
-                'image' => 'https://example.com/image2.jpg', 
-            ], 
-            [ 
-                'id'=> 3, 
-                'name' => 'anak-anak', 
-                'slug' => 'Pakaian Anak-Anak', 
-                'description' => 'Ini adalah produk pakaian anak-anak', 
-                'image' => 'https://example.com/image3.jpg', 
-            ], 
-            [ 
-                'id'=> 4, 
-                'name' => 'aksesori', 
-                'slug' => 'Aksesori', 
-                'description' => 'Ini adalah produk aksesori', 
-                'image' => 'https://example.com/image4.jpg', 
-            ], 
-            [ 
-                'id'=> 5, 
-                'name' => 'sepatu', 
-                'slug' => 'Sepatu', 
-                'description' => 'Ini adalah produk sepatu', 
-                'image' => 'https://example.com/image5.jpg', 
-            ] 
-        ]; 
+    private $themeFolder;
+
+    public function __construct()
+    {
+        $theme = Theme::where('status', 'active')->first();
+        if ($theme) {
+            $this->themeFolder = $theme->folder;
+        } else {
+            $this->themeFolder = 'default';
+        }
+    }
+
+    public function index()
+    {
+        $categories = Categories::latest()->take(4)->get();
+        $products = Product::paginate(20);
         
-        return view('homepage', [ 
-            'categories' => $categories, 
+        return view($this->themeFolder.'.homepage',[
+            'categories' => $categories,
+            'products'=>$products,
+            'title'=>'Homepage'
         ]);
+    }
+
+    public function products(Request $request)
+    {
+        $title = "Products";
+
+        $query = Product::query();
+
+        if ($request->has('search') && $request->search) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->paginate(20);
+
+        return view($this->themeFolder.'.products',[
+            'title'=>$title,
+            'products' => $products,
+        ]);
+    }
+
+    public function product($slug){
+        $product = Product::whereSlug($slug)->first();
+
+        if (!$product) {
+            return abort(404);
+        }
+
+        $relatedProducts = Product::where('product_category_id', $product->product_category_id)
+            ->where('id', '!=', $product->id)
+            ->take(4)
+            ->get();
+
+        return view($this->themeFolder.'.product', [
+            'slug' => $slug,
+            'product' => $product,
+            'relatedProducts' => $relatedProducts,
+        ]);
+    }
+
+    public function categories()
+    {
+        $categories = Categories::latest()->paginate(20);
+
+        return view($this->themeFolder.'.categories',[
+            'title'=>'Categories',
+            'categories' => $categories,
+        ]);
+    }
+
+    public function category($slug)
+    {
+        $category = Categories::whereSlug($slug)->first();
+
+        if($category){
+            $products = Product::where('product_category_id',$category->id)->paginate(20);
+
+            return view($this->themeFolder.'.category_by_slug', [
+                'slug' => $slug, 
+                'category' => $category,
+                'products' => $products,
+            ]);
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function cart()
+    {
+        $cart = Cart::query()
+            ->with(
+                [
+                    'items',
+                    'items.itemable'
+                ]
+            )
+            ->where('user_id', auth()->guard('customer')->user()->id)
+            ->first();
         
-     } 
-     public function products() 
-    { 
-       return view('products'); 
-    } 
-    public function product($slug){ 
-        return view('product', ['slug' => $slug]); 
-    } 
-  
-    public function categories() 
-    { 
-        return view('categories'); 
-    } 
-  
-    public function category($slug) 
-    { 
-        return view('web.category_by_slug', ['slug' => $slug]); 
-    } 
-  
-    public function cart() 
-    { 
-        return view('web.cart'); 
-    } 
-    
-    public function checkout() 
-    { 
-        return view('web.checkout'); 
-    } 
- } 
+
+        return view($this->themeFolder.'.cart',[
+            'title'=>'Cart',
+            'cart' => $cart,
+        ]);
+    }
+
+    public function checkout()
+    {
+        return view($this->themeFolder.'.checkout',[
+            'title'=>'Checkout'
+        ]);
+    }
+}

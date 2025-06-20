@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use Illuminate\Support\Facades\Validator;
+
 
 class ProductCategoryController extends Controller
 {
@@ -40,16 +43,10 @@ class ProductCategoryController extends Controller
         /**
          * cek validasi input
          */
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'description' => 'required',
-            'sku' => 'required|string|max:50',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'product_category_id' => 'required|exists:product_categories,id',
-            'image_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
+            'description' => 'required'
         ]);
 
         /**
@@ -69,12 +66,13 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        $category->sku = $request->sku;
-        $category->price = $request->price;
-        $category->stock = $request->stock;
-        $category->product_category_id = $request->product_category_id;
-        $category->image_url = $request->image_url;
-        $category->is_active = $request->is_active;
+        
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
+            $category->image = $imagePath;
+        }
 
         $category->save();
 
@@ -114,16 +112,10 @@ class ProductCategoryController extends Controller
         /**
          * cek validasi input
          */
-        $validator = \Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255',
-            'description' => 'required',
-            'sku' => 'required|string|max:50',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'product_category_id' => 'required|exists:product_categories,id',
-            'image_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
+            'description' => 'required'
         ]);
 
         /**
@@ -143,12 +135,13 @@ class ProductCategoryController extends Controller
         $category->name = $request->name;
         $category->slug = $request->slug;
         $category->description = $request->description;
-        $category->sku = $request->sku;
-        $category->price = $request->price;
-        $category->stock = $request->stock;
-        $category->product_category_id = $request->product_category_id;
-        $category->image_url = $request->image_url;
-        $category->is_active = $request->is_active ?? true;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('uploads/categories', $imageName, 'public');
+            $category->image = $imagePath;
+        }
 
         $category->save();
 
