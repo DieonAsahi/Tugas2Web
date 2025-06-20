@@ -15,14 +15,15 @@ class HomepageController extends Controller
     private $themeFolder;
 
     public function __construct()
-    {
-        $theme = Theme::where('status', 'active')->first();
-        if ($theme) {
-            $this->themeFolder = $theme->folder;
-        } else {
-            $this->themeFolder = 'default';
-        }
+{
+    $theme = Theme::where('status', 'active')->first();
+    if ($theme) {
+        $this->themeFolder = 'theme.' . $theme->folder;
+    } else {
+        $this->themeFolder = 'theme.default';
     }
+}
+
 
     public function index()
     {
