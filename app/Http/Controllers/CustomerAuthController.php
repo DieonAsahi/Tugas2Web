@@ -25,14 +25,15 @@ class CustomerAuthController extends Controller
 
     public function login()
     {
-        return view($this->themeFolder.'.customer.login',[
+        return view('theme.'.$this->themeFolder.'.customer.login',[
             'title'=>'Login'
         ]);
+
     }
 
     public function register()
     {
-        return view($this->themeFolder.'.customer.register',[
+        return view('theme.'.$this->themeFolder.'.customer.register',[
             'title'=>'Register'
         ]);
     }
