@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+
 class ProductController extends Controller
 {
     /**
@@ -19,9 +20,9 @@ class ProductController extends Controller
         // Mencari produk berdasarkan nama dan deskripsi jika ada pencarian
         $products = Product::when($q, function ($query, $q) {
             return $query->where('name', 'like', "%{$q}%")
-                         ->orWhere('description', 'like', "%{$q}%");
+                ->orWhere('description', 'like', "%{$q}%");
         })->paginate(10); // Menampilkan hasil produk dengan pagination
-        
+
         return view('dashboard.products.index', compact('products', 'q'));
     }
 
@@ -31,7 +32,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Categories::all();
-        return view('dashboard.products.create', compact('categories')); 
+        return view('dashboard.products.create', compact('categories'));
     }
 
     /**
@@ -91,7 +92,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::find($id);
     }
 
     /**

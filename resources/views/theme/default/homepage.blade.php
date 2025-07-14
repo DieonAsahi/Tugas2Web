@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title"> Beranda</x-slot>
 
-    <div class="container py-3">
+    <div class="container py-3 border-bottom pb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 style="font-size: 1.5rem;">Kategori Product</h3>
             <a href="{{ URL::to('/categories') }}" class="btn btn-outline-primary btn-sm">Lihat Semua Kategori</a>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="container py-3">
+    <div class="container py-3 pt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 style="font-size: 1.5rem;">Product Kami</h3>
             <a href="{{ URL::to('/products') }}" class="btn btn-outline-primary btn-sm">Lihat Semua Product</a>

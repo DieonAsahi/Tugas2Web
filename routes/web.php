@@ -32,6 +32,10 @@ Route::group(['middleware' => ['is_customer_login']], function () {
     });
 });
 
+Route::get('/test-categories', function () {
+    return \App\Models\Categories::all();
+});
+
 Route::group(['prefix' => 'customer'], function () {
     Route::controller(CustomerAuthController::class)->group(function () {
         Route::group(['middleware' => 'check_customer_login'], function () {
