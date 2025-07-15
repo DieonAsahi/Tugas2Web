@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+
 
 class ProductController extends Controller
 {
@@ -75,7 +77,7 @@ class ProductController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
-            $product->image_url = $imagePath;
+            $product->image = $imagePath;
         }
 
         $product->save();
@@ -145,7 +147,7 @@ class ProductController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $imagePath = $image->storeAs('uploads/products', $imageName, 'public');
-            $product->image_url = $imagePath;
+            $product->image = $imagePath;
         }
 
         $product->save();
@@ -169,5 +171,33 @@ class ProductController extends Controller
 
         return redirect()->route('dashboard.products.index')
             ->with('successMessage', 'Data Berhasil Dihapus');
+    }
+
+    public function sync($id, Request $request)
+    {
+        $product = Product::findOrFail($id);
+
+        $response = Http::post('https://api.phb-umkm.my.id/api/product/sync', [
+            'client_id' => env('CLIENT_ID'),
+            'client_secret' => env('CLIENT_SECRET'),
+            'seller_product_id' => (string) $product->id,
+            'name' => $product->name,
+            'description' => $product->description,
+            'price' => $product->price,
+            'stock' => $product->stock,
+            'sku' => $product->sku,
+            'image' => $product->image,
+            'weight' => $product->weight,
+            'is_active' => $request->is_active == 1 ? false : true,
+            'category_id' => (string) $product->category->hub_category_id,
+        ]);
+
+        if ($response->successful() && isset($response['product_id'])) {
+            $product->hub_product_id = $request->is_active == 1 ? null : $response['product_id'];
+            $product->save();
+        }
+
+        session()->flash('successMessage', 'Product Synced Successfully');
+        return redirect()->back();
     }
 }

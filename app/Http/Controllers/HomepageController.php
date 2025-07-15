@@ -15,25 +15,25 @@ class HomepageController extends Controller
     private $themeFolder;
 
     public function __construct()
-{
-    $theme = Theme::where('status', 'active')->first();
-    if ($theme) {
-        $this->themeFolder = 'theme.' . $theme->folder;
-    } else {
-        $this->themeFolder = 'theme.default';
+    {
+        $theme = Theme::where('status', 'active')->first();
+        if ($theme) {
+            $this->themeFolder = 'theme.' . $theme->folder;
+        } else {
+            $this->themeFolder = 'theme.default';
+        }
     }
-}
 
 
     public function index()
     {
         $categories = Categories::latest()->take(4)->get();
         $products = Product::paginate(20);
-        
-        return view($this->themeFolder.'.homepage',[
+
+        return view($this->themeFolder . '.homepage', [
             'categories' => $categories,
-            'products'=>$products,
-            'title'=>'Homepage'
+            'products' => $products,
+            'title' => 'Homepage'
         ]);
     }
 
@@ -49,13 +49,14 @@ class HomepageController extends Controller
 
         $products = $query->paginate(20);
 
-        return view($this->themeFolder.'.products',[
-            'title'=>$title,
+        return view($this->themeFolder . '.products', [
+            'title' => $title,
             'products' => $products,
         ]);
     }
 
-    public function product($slug){
+    public function product($slug)
+    {
         $product = Product::whereSlug($slug)->first();
 
         if (!$product) {
@@ -67,7 +68,7 @@ class HomepageController extends Controller
             ->take(4)
             ->get();
 
-        return view($this->themeFolder.'.product', [
+        return view($this->themeFolder . '.product', [
             'slug' => $slug,
             'product' => $product,
             'relatedProducts' => $relatedProducts,
@@ -78,8 +79,8 @@ class HomepageController extends Controller
     {
         $categories = Categories::latest()->paginate(20);
 
-        return view($this->themeFolder.'.categories',[
-            'title'=>'Categories',
+        return view($this->themeFolder . '.categories', [
+            'title' => 'Categories',
             'categories' => $categories,
         ]);
     }
@@ -88,15 +89,15 @@ class HomepageController extends Controller
     {
         $category = Categories::whereSlug($slug)->first();
 
-        if($category){
-            $products = Product::where('product_category_id',$category->id)->paginate(20);
+        if ($category) {
+            $products = Product::where('product_category_id', $category->id)->paginate(20);
 
-            return view($this->themeFolder.'.category_by_slug', [
-                'slug' => $slug, 
+            return view($this->themeFolder . '.category_by_slug', [
+                'slug' => $slug,
                 'category' => $category,
                 'products' => $products,
             ]);
-        }else{
+        } else {
             return abort(404);
         }
     }
@@ -112,18 +113,34 @@ class HomepageController extends Controller
             )
             ->where('user_id', auth()->guard('customer')->user()->id)
             ->first();
-        
 
-        return view($this->themeFolder.'.cart',[
-            'title'=>'Cart',
+
+        return view($this->themeFolder . '.cart', [
+            'title' => 'Cart',
             'cart' => $cart,
         ]);
     }
 
     public function checkout()
     {
-        return view($this->themeFolder.'.checkout',[
-            'title'=>'Checkout'
+        $cart = Cart::query()
+            ->with(['items', 'items.itemable'])
+            ->where('user_id', auth()->guard('customer')->user()->id)
+            ->first();
+
+        $subtotal = $cart->items->sum(function ($item) {
+            return (optional($item->itemable)->getPrice() ?? 0) * $item->quantity;
+        });
+
+        $ongkir = $subtotal >= 50000 ? 0 : 10000;
+        $total = $subtotal + $ongkir;
+
+        return view($this->themeFolder . '.checkout', [
+            'title' => 'Checkout',
+            'cart' => $cart,
+            'subtotal' => $subtotal,
+            'ongkir' => $ongkir,
+            'total' => $total
         ]);
     }
 }

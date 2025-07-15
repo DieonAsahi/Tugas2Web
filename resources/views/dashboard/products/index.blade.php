@@ -56,6 +56,7 @@
                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                         Actions
                     </th>
+                    <th>On/Off</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,8 +68,8 @@
                         </p>
                     </td>
                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                        @if($product->image_url)
-                        <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
+                        @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-10 w-10 object-cover rounded">
                         @else
                         <div class="h-10 w-10 bg-gray-200 flex items-center justify-center rounded">
                             <span class="text-gray-500 text-sm">N/A</span>
@@ -117,6 +118,18 @@
                                 </form>
                             </flux:menu>
                         </flux:dropdown>
+                    </td>
+
+                    <td>
+                        <form id="sync-product-{{ $product->id }}" action="{{ route('products.sync', $product->id) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="is_active" value="@if($product->hub_product_id) 1 @else 0 @endif">
+                            @if($product->hub_product_id)
+                            <flux:switch checked onchange="document.getElementById('sync-product-{{ $product->id }}').submit()" />
+                            @else
+                            <flux:switch onchange="document.getElementById('sync-product-{{ $product->id }}').submit()" />
+                            @endif
+                        </form>
                     </td>
                 </tr>
                 @endforeach

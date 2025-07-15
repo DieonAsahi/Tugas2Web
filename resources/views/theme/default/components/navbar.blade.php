@@ -1,8 +1,8 @@
 <div>
-    <nav class="navbar navbar-expand-lg fixed-top border-bottom" style="background: linear-gradient(90deg, #ffffffff 0%, #3D74B6 100%);">
+    <nav class="navbar navbar-expand-lg fixed-top border-bottom" style="background: linear-gradient(90deg, #ffffffff 0%, #0a3264ff 100%);">
         <div class="container">
             <a class="navbar-brand text-white" href="/">
-                <img src="{{ asset('storage/uploads/assets/Logo Color Art.png') }}" alt="Logo" width="90" height="50" >
+                <img src="{{ asset('storage/uploads/assets/ColorArt Hijau.png') }}" alt="Logo" width="90" height="50">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,7 +20,11 @@
                     </li>
                 </ul>
 
-                <x-cart-icon></x-cart-icon>
+                @if(auth()->guard('customer')->check())
+                <x-cart-icon>
+                    <a href="{{ route('cart.index') }}">Cart</a>
+                </x-cart-icon>
+                @endif
 
                 @if(auth()->guard('customer')->check())
                 <div class="dropdown">

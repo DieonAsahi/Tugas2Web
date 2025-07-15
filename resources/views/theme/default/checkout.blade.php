@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot name="title">Checkout</x-slot>
 
-    <div class="container my-5">
+    <div class="container my-5" style="color: #3D74B6;">
         <div class="row">
             <!-- Detail Penagihan -->
             <div class="col-md-7">
@@ -53,50 +53,52 @@
                             <input type="text" class="form-control" id="cardCvv" placeholder="CVV">
                         </div>
                     </div>
-                    <button class="btn btn-primary w-100 mt-3" type="submit">Pesan Sekarang</button>
                 </form>
             </div>
+
             <!-- Ringkasan Pesanan -->
             <div class="col-md-5">
-                <div class="card">
-                    <div class="card-header bg-light">
-                        <h5 class="mb-0">Ringkasan Pesanan</h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group mb-3">
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <div>
-                                    <h6 class="my-0">Nama Produk</h6>
-                                    <small class="text-muted">Deskripsi singkat</small>
-                                </div>
-                                <span class="text-muted">Rp12.000</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between lh-sm">
-                                <div>
-                                    <h6 class="my-0">Produk Kedua</h6>
-                                    <small class="text-muted">Deskripsi singkat</small>
-                                </div>
-                                <span class="text-muted">Rp8.000</span>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Subtotal</span>
-                                <strong>Rp20.000</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Ongkir</span>
-                                <strong>Rp5.000</strong>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>Total</span>
-                                <strong>Rp25.000</strong>
-                            </li>
-                        </ul>
-                        <div class="alert alert-info mt-3" role="alert">
-                            Gratis ongkir untuk pesanan di atas Rp50.000!
+                <ul class="list-group mb-3">
+                    <h4 class="mb-4">Detail Pesanan</h4>
+                    @forelse ($cart->items as $item)
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0" style="color: #3D74B6;">{{ $item->itemable->name ?? 'Produk tidak ditemukan' }}</h6>
+                            <small class="text-muted">Jumlah: {{ $item->quantity }}</small>
                         </div>
-                    </div>
-                </div>
+                        <span class="text" style="color: #07bd1fff;">Rp{{ number_format((optional($item->itemable)->getPrice() ?? 0) * $item->quantity, 0, ',', '.') }}
+                        </span>
+                    </li>
+                    @empty
+                    <li class="list-group-item text-danger">Keranjang kosong.</li>
+                    @endforelse
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span style="color: #3D74B6;">Subtotal</span>
+                        <strong style="color: #07bd1fff">Rp{{ number_format($subtotal, 0, ',', '.') }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span style="color: #3D74B6;">Ongkir</span>
+                        <strong style="color: #07bd1fff">Rp{{ number_format($ongkir, 0, ',', '.') }}</strong>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span style="color: #3D74B6;">Total</span>
+                        <strong style="color: #07bd1fff">Rp{{ number_format($total, 0, ',', '.') }}</strong>
+                    </li>
+                </ul>
+
+                @if ($subtotal < 1000000)
+                    <div class="alert alert-info" role="alert">
+                    Gratis ongkir untuk pesanan di atas Rp1.000.000!
             </div>
+            @endif
+            <button class="btn btn-primary w-100 mt-3" type="submit" style="background-color: #00ad17ff; border:1px solid #009e15ff ">Pesan Sekarang</button>
         </div>
     </div>
 </x-layout>
+
+<!-- <style>
+    .form-control::placeholder {
+        color: #73a3deff;
+        opacity: 1;
+    }
+</style> -->

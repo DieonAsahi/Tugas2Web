@@ -9,7 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\CartController;
-
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\ApiController;
@@ -31,6 +31,11 @@ Route::group(['middleware' => ['is_customer_login']], function () {
         Route::patch('cart/update/{id}', 'update')->name('cart.update');
     });
 });
+
+Route::group(['middleware' => ['is_customer_login']], function () {
+    Route::post('checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+});
+
 
 Route::get('/test-categories', function () {
     return \App\Models\Categories::all();
@@ -66,6 +71,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', 'verified']], fu
     Route::resource('categories', ProductCategoryController::class)->names('dashboard.categories');
     Route::resource('products', ProductController::class)->names('dashboard.products');
     Route::resource('themes', ThemeController::class)->names('dashboard.themes');
+    Route::post('products/sync/{id}', [ProductController::class, 'sync'])->name('products.sync');
+    Route::post('category/sync/{id}', [ProductCategoryController::class, 'sync'])->name('category.sync');
 });
 
 Route::prefix('dashboard')->name('dashboard.')->group(function () {
