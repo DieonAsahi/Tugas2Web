@@ -10,6 +10,8 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductSyncController;
 use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\ApiController;
@@ -20,7 +22,8 @@ Route::get('products', [HomepageController::class, 'products']);
 Route::get('product/{slug}', [HomepageController::class, 'product'])->name('product.show');
 Route::get('categories', [HomepageController::class, 'categories']);
 Route::get('category/{slug}', [HomepageController::class, 'category']);
-
+Route::post('/admin/categories/sync/{id}', [CategoryController::class, 'sync'])->name('category.sync');
+Route::post('/admin/products/sync/{id}', [ProductSyncController::class, 'sync'])->name('products.sync');
 Route::get('cart', [HomepageController::class, 'cart'])->name('cart.index');
 Route::get('checkout', [HomepageController::class, 'checkout'])->name('checkout.index');
 

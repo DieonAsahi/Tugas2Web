@@ -20,6 +20,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_syncs');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('hub_product_id');
+        });
     }
 };
