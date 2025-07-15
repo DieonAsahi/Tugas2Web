@@ -1,10 +1,28 @@
 <x-layout>
     <x-slot name="title">Beranda</x-slot>
+    <link rel="icon" type="image/png" href="{{ asset('storage/uploads/assets/Logo Color Art.png') }}">
 
-<div class="container-fluid px-0">
-    <img src="{{ asset('storage/uploads/assets/Slider.png') }}" alt="Slider" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
-</div>
 
+    @push('styles')
+    <style>
+        .slider-img {
+            width: 100%;
+            height: 60vh;
+            object-fit: cover;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .slider-img {
+                height: 30vh;
+            }
+        }
+    </style>
+    @endpush
+
+    <div class="container-fluid px-0">
+        <img src="{{ asset('storage/uploads/assets/Slider.png') }}" alt="Slider" class="promo-img w-100">
+    </div>
 
     <div class="container py-3 border-bottom pb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -33,28 +51,27 @@
         </div>
     </div>
 
-    <div class="container py-5">
-    <h3 style="font-size: 1.5rem; color: #3D74B6;" class="mb-4">Promo Spesial dari Color Art</h3>
-
-    <div id="promoCarousel" class="carousel slide shadow-sm" data-bs-ride="carousel" data-bs-interval="4000">
-        <div class="carousel-inner rounded">
-            @foreach (['COLOR ART.png', 'Art Day.png', 'animal.jpg', 'diskon.jpg'] as $index => $image)
-                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                    <img src="{{ asset('storage/uploads/assets/' . $image) }}" class="d-block w-100" alt="Promo {{ $index + 1 }}" style="max-height: 400px; object-fit: cover;">
+    <div class="container my-4">
+        <h3 style="color: #3D74B6;">Promo Spesial dari Color Art</h3>
+        <div id="promoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ asset('storage/uploads/assets/COLOR ART.png') }}" class="d-block w-100 promo-img" alt="Color Art">
                 </div>
-            @endforeach
+                <div class="carousel-item">
+                    <img src="{{ asset('storage/uploads/assets/Art Day.png') }}" class="d-block w-100 promo-img" alt="Art Day">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('storage/uploads/assets/animal.jpg') }}" class="d-block w-100 promo-img" alt="Animal Art">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('storage/uploads/assets/diskon.jpg') }}" class="d-block w-100 promo-img" alt="Diskon">
+                </div>
+            </div>
         </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Sebelumnya</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Selanjutnya</span>
-        </button>
     </div>
-</div>
+
+
 
     <div class="container py-3 pt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
