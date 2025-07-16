@@ -193,7 +193,10 @@ class ProductController extends Controller
         ]);
 
         if ($response->successful() && isset($response['product_id'])) {
-            $product->hub_product_id = $request->is_active == 1 ? null : $response['product_id'];
+            $isActive = $request->is_active == 1 ? false : true;
+
+            $product->hub_product_id = $isActive ? $response['product_id'] : null;
+            $product->is_active = $isActive; // ✅ ini penting
             $product->save();
         }
 
