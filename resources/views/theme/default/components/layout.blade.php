@@ -142,7 +142,7 @@
                   <div class="row">
                         <div class="col-md-6 mb-3">
                               <h5 class="mb-3">Color Art</h5>
-                              <p class="small">Belanja mudah, cepat, dan aman di toko online kami. Temukan produk favorit Anda dengan harga terbaik.</p>
+                              <p class="small">Belanja mudah, cepat, dan aman di toko online kami. Temukan perlengkapan lukis dan karya seni favorit Anda dengan harga terbaik.</p>
                         </div>
                         <div class="col-md-3 mb-3">
                               <h6 class="mb-3">Navigasi</h6>
@@ -156,7 +156,7 @@
                         <div class="col-md-3 mb-3">
                               <h6 class="mb-3">Kontak Kami</h6>
                               <ul class="list-unstyled small">
-                                    <li><i class="bi bi-envelope"></i> info@colorart.com</li>
+                                    <li><i class="bi bi-envelope"></i> colorart@gmail.com</li>
                                     <li><i class="bi bi-telephone"></i> +62 896 9595 018</li>
                                     <li><i class="bi bi-geo-alt"></i> Tegal, Indonesia</li>
                               </ul>

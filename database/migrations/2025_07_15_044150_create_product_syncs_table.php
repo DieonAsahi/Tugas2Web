@@ -12,16 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('hub_product_id')->nullable();
-        });
-    }
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('hub_product_id');
+            $table->unsignedBigInteger('hub_product_id')->nullable(); 
         });
     }
 };

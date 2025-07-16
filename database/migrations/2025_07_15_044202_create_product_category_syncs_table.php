@@ -9,21 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Migrasi Category
     public function up(): void
     {
-        Schema::table('product_categories', function (Blueprint $table) {
-            $table->string('hub_category_id')->nullable();
-        });
-    }
-
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('product_categories', function (Blueprint $table) {
-            $table->dropColumn('hub_category_id');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->string('hub_category_id')->nullable(); 
         });
     }
 };
