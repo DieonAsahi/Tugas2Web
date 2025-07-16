@@ -12,8 +12,8 @@ return new class extends Migration
     // Migrasi Category
     public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('hub_category_id')->nullable(); 
+        Schema::table('product_categories', function (Blueprint $table) {
+            $table->string('hub_category_id')->nullable();
         });
     }
 };
