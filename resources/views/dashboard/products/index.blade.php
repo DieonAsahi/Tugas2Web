@@ -116,7 +116,7 @@
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                            </flux:menu>
+                            </flux:menu>s
                         </flux:dropdown>
                     </td>
 
